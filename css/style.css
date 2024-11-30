@@ -1,0 +1,141 @@
+/* Основные стили для страницы */
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('../images/river-boat.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+/* Центровка заголовков и их стилизация */
+h1, h2 {
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Затенение фона для читаемости текста */
+#auth-page, #main-page {
+    background: rgba(0, 0, 0, 0.7); /* Более насыщенное затемнение */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Центровка страницы авторизации */
+#auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: absolute;
+    width: 100%;
+}
+
+/* Стиль формы */
+form {
+    background: rgba(255, 255, 255, 0.9); /* Увеличил контраст фона */
+    padding: 20px;
+    border-radius: 15px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Стили для меток */
+label {
+    color: #333; /* Темный цвет для текста меток */
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Стили для инпутов */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 2px solid #007c7c;
+    border-radius: 5px;
+    background-color: #e0f7f7;
+    color: #333;
+}
+
+input:focus {
+    outline: none;
+    border-color: #006666;
+}
+
+/* Стили для кнопок */
+button {
+    width: auto;
+    padding: 10px;
+    border: none;
+    background-color: #007c7c;  /* Более приглушенный бирюзовый */
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px; /* Отступ между кнопками */
+    margin-right: 10px; /* Расстояние между кнопками */
+}
+
+button:hover {
+    background-color: #006666;  /* Темный бирюзовый при наведении */
+}
+
+/* Ошибки отображаются красным текстом */
+#error-message, #register-error {
+    color: red;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Карта */
+#map {
+    width: 100%;
+    height: 400px;
+    border-radius: 10px;
+}
+
+/* Кнопка "Показать карту" */
+#user-btn {
+    background-color: #007c7c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 20px auto;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#user-btn:hover {
+    background-color: #006666;
+}
+
+/* Кнопка "Выйти" */
+#logout-btn {
+    background-color: #007c7c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#logout-btn:hover {
+    background-color: #006666;
+}
+
+/* Плавный переход для всех элементов */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
