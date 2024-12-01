@@ -13,13 +13,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const userRoleBtn = document.getElementById('user-btn'); // Кнопка "Показать карту"
     const authForm = document.getElementById('auth-form');
     const registerFormSubmit = document.getElementById('register-form-submit');
-    const mapDiv = document.getElementById('map');  // Элемент карты
+    const mapDiv = document.getElementById('map'); // Элемент карты
 
     // Проверка авторизации при загрузке
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
     if (loggedInUser) {
         console.log('User logged in:', loggedInUser);
-        showMainPage();  // Если пользователь уже авторизован, показываем главную страницу
+        showMainPage();
     }
 
     // Показать форму входа
@@ -42,15 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        // Получаем пользователей из localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
         let user = users.find(u => u.username === username);
 
         if (user) {
             if (user.password === password) {
-                // Сохраняем в localStorage успешного пользователя
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
-                showMainPage();  // Показываем главную страницу после успешного входа
+                showMainPage();
             } else {
                 errorMessage.innerText = 'Неверный пароль';
             }
@@ -65,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const newUsername = document.getElementById('new-username').value;
         const newPassword = document.getElementById('new-password').value;
 
-        // Получаем пользователей из localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
         let existingUser = users.find(u => u.username === newUsername);
 
@@ -74,9 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             const newUser = { username: newUsername, password: newPassword };
             users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));  // Сохраняем всех пользователей
-            localStorage.setItem('loggedInUser', JSON.stringify(newUser));  // Сохраняем нового пользователя
-            showMainPage();  // Показываем главную страницу после успешной регистрации
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('loggedInUser', JSON.stringify(newUser));
+            showMainPage();
         }
     });
 
@@ -88,61 +85,74 @@ document.addEventListener('DOMContentLoaded', () => {
         authPage.style.display = 'block';
     });
 
-    // Показ главной страницы
     function showMainPage() {
         console.log('Показываю главную страницу');
         authPage.style.display = 'none';
         mainPage.style.display = 'block';
-        userRoleBtn.style.display = 'inline-block';  // Отображаем кнопку "Показать карту"
+        userRoleBtn.style.display = 'inline-block';
     }
 
+    // Инициализация карты
     function initMap() {
-    console.log('Инициализация карты');
+        console.log('Инициализация карты');
+        const map = new ymaps.Map("map", {
+            center: [55.7558, 37.6173], // Центр Москвы
+            zoom: 12
+        });
 
-    // Проверка поддержки геолокации
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const userCoordinates = [position.coords.latitude, position.coords.longitude];
+        const boatIcon = {
+          iconLayout: 'default#image',
+          iconImageHref: 'images/boat-icon.svg', // исправленный путь
+          iconImageSize: [40, 40],
+          iconImageOffset: [-20, -20]
+        };
 
-                // Создание карты с центром на текущем местоположении
-                const map = new ymaps.Map("map", {
-                    center: userCoordinates,
-                    zoom: 12
-                });
 
-                map.geoObjects.add(new ymaps.Placemark(userCoordinates, {
-                    balloonContent: "Ваше текущее местоположение"
-                }, {
-                    preset: 'islands#blueDotIcon'
-                }));
-            },
-            (error) => {
-                console.error("Ошибка при получении геолокации:", error);
-                // Фолбек на Москву, если доступ к геолокации запрещён
-                showDefaultMap();
-            }
-        );
-    } else {
-        console.error("Геолокация не поддерживается браузером");
-        showDefaultMap();
+        const boatLocations = [
+    [55.4452, 37.3700], // Кремль (вдоль реки)
+    [55.7493, 37.6156], // Зарядье (вдоль реки)
+    [55.7483, 37.6252], // Большой Каменный мост (вдоль реки)
+    [55.7439, 37.6333], // Парк Горького (вдоль реки)
+    [55.7405, 37.6402], // Лужники (вдоль реки)
+    [55.7375, 37.6504], // Новодевичий монастырь (вдоль реки)
+    [55.7333, 37.6555], // Москва-Сити (вдоль реки)
+    [55.7300, 37.6617], // Воробьёвы горы (вдоль реки)
+    [55.7267, 37.6675], // Андреевский мост (вдоль реки)
+    [55.7233, 37.6732]  // Киевская (вдоль реки)
+];
+
+
+
+        boatLocations.forEach(coords => {
+            map.geoObjects.add(new ymaps.Placemark(coords, {
+                balloonContent: "Кораблик"
+            }, boatIcon));
+        });
+
+        // Добавление геолокации пользователя
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userCoordinates = [position.coords.latitude, position.coords.longitude];
+                    map.setCenter(userCoordinates);
+                    map.geoObjects.add(new ymaps.Placemark(userCoordinates, {
+                        balloonContent: "Ваше текущее местоположение"
+                    }, {
+                        preset: 'islands#blueDotIcon'
+                    }));
+                },
+                (error) => {
+                    console.error("Ошибка при получении геолокации:", error);
+                }
+            );
+        } else {
+            console.error("Геолокация не поддерживается браузером");
+        }
     }
-}
 
-function showDefaultMap() {
-    const map = new ymaps.Map("map", {
-        center: [55.7558, 37.6173], // Центр Москвы
-        zoom: 10
-    });
-    map.geoObjects.add(new ymaps.Placemark([55.7558, 37.6173], {
-        balloonContent: "Местоположение по умолчанию (Москва)"
-    }));
-}
-
-
-    // Используем ymaps.ready для инициализации карты только после загрузки API
+    // Показ карты по клику на кнопку
     userRoleBtn.addEventListener('click', () => {
         mapDiv.style.display = 'block';
-        ymaps.ready(initMap);  // Инициализация карты
+        ymaps.ready(initMap);
     });
 });
