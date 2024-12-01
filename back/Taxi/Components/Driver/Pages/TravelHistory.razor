@@ -1,0 +1,11 @@
+﻿@page "/TravelHistory"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize(Roles = Consts.DRIVER_ROLE)]
+@rendermode InteractiveAuto
+<h3>История поездок</h3>
+
+@code {
+    
+}
